@@ -2,4 +2,6 @@ VK_APP_ID = 'appid'
 VK_LOGIN = 'login'
 VK_PASSWORD = 'password'
 
+CHECK_PERIOD = 1  # in seconds
+
 DIR_TO_SAVE = '/home/vk-saver'
