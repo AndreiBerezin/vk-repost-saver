@@ -3,4 +3,4 @@ venv
 config.py
 logs
 *.pyc
-token.lock
+*.token

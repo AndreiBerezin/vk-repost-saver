@@ -1,6 +1,5 @@
 VK_APP_ID = 'appid'
-VK_LOGIN = 'login'
-VK_PASSWORD = 'password'
+VK_USERS = {'login1': 'password1', 'login2': 'password2'}
 
 CHECK_PERIOD = 1  # in seconds
 

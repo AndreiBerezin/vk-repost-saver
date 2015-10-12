@@ -1,32 +1,8 @@
 import config
-from vk.api import API, Session
-from vk.mixins import AuthMixin
+
 import os
 import time
-
-
-def connect():
-    token_lock_filename = 'token.lock'
-    if os.path.isfile(token_lock_filename):
-        file_read = open(token_lock_filename, 'r')
-        access_token = file_read.read()
-        file_read.close()
-    else:
-        auth = AuthMixin(
-            app_id=config.VK_APP_ID,
-            user_login=config.VK_LOGIN,
-            user_password=config.VK_PASSWORD,
-            scope='messages, offline'
-        )
-        access_token, _ = auth.get_access_token()
-        file_write = open(token_lock_filename, 'w')
-        file_write.write(access_token)
-        file_write.close()
-
-    session = Session(access_token=access_token)
-    vk_api = API(session, lang='ru')
-
-    return vk_api
+from ConnectionManager import ConnectionManager
 
 
 def process_received_message(vk_api, uid, message):
@@ -80,14 +56,17 @@ def main():
         print 'save dir does not exist'
         return 1
 
-    try:
-        vk_api = connect()
-    except Exception:  # todo:use specific exception
-        print 'no connect to vk.com'
-        return 2
+    connection_manager = ConnectionManager()
+    for login in config.VK_USERS:
+        try:
+            connection_manager.add_connection(login=login, password=config.VK_USERS[login])
+        except Exception:  # todo:use specific exception
+            print 'no connect to vk.com for ' + login
+            return 2
+    connections = connection_manager.get_connections()
+    print 's'
 
-
-    user_info = vk_api.users.get()
+    '''user_info = vk_api.users.get()
     uid = user_info[0]['uid']
     last_message_id = 0
     while True:
@@ -105,5 +84,5 @@ def main():
         else:
             last_message_id = response_message_id
 
-
+'''
 main()
