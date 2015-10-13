@@ -3,4 +3,6 @@ VK_USERS = {'login1': 'password1', 'login2': 'password2'}
 
 CHECK_PERIOD = 1  # in seconds
 
-DIR_TO_SAVE = '/home/vk-saver'
+DIR_TO_SAVE = '/home/user/vk-saver'
+
+LOCALE = 'ru'
