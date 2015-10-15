@@ -27,8 +27,4 @@ def main():
             user = users[login]
             Dialog.process(user=user)
 
-            #response_message_id =
-            #if response_message_id:
-            #    user.set_last_message_id(response_message_id)
-
 main()

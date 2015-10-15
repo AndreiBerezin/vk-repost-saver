@@ -4,3 +4,5 @@ config.py
 logs
 *.pyc
 *.token
+*.input.save
+*.input.pdf
