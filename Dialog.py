@@ -1,10 +1,11 @@
 import time
-from Storage import Storage
 import os
+from Storage import Storage
+from Translator import Translator
 
 
 class Dialog:
-    _saver_response_prefix = 'saver response'
+    _saver_response_prefix = Translator.translate('saverResponse')
     _waiting_input_save = 'input.save'
     _waiting_input_pdf = 'input.pdf'
 
@@ -35,25 +36,24 @@ class Dialog:
     @staticmethod
     def _read(user, message):
         text = message['body'].encode('utf-8')
-        if text == 'save':
+        lower_text = text.lower()
+
+        if lower_text == Translator.translate('save'):
             if not message['attachment'] or message['attachment']['type'].encode('utf-8') != 'wall':
                 return False
             tmp_dir = Storage.save_tmp(message=message)
             Dialog._start_waiting_input(user, Dialog._waiting_input_save, tmp_dir)
-            back_message = 'Choose dir for save:<br>%s' % Storage.get_directories(user=user)
-        elif text == 'pdf':
+            back_message = '%s:<br>%s' % (Translator.translate('chooseDir'), Storage.get_directories(user=user))
+        elif lower_text == Translator.translate('pdf'):
             back_message = ''
-        elif text == 'link':
+        elif lower_text == Translator.translate('link'):
             back_message = ''
         elif Dialog._is_waiting_input(user, Dialog._waiting_input_save):
             back_message = ''
         elif Dialog._is_waiting_input(user, Dialog._waiting_input_pdf):
             back_message = ''
         else:
-            back_message = 'usage:<br>' \
-                           '"save" - save repost in path<br>' \
-                           '"pdf" - return pdf for repost from path<br>' \
-                           '"link" - return dropbox link to root dir<br>'
+            back_message = Translator.translate('usage')
 
         return back_message
 

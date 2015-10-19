@@ -8,16 +8,27 @@ class Storage:
         pass
 
     @staticmethod
+    def recursive_walk(folder):
+        dirs = []
+        for root_dir, subdir_list, files_list in os.walk(folder):
+            if subdir_list:
+                for sub_dir in subdir_list:
+                    dirs += Storage.recursive_walk(root_dir + os.sep + sub_dir)
+
+            return dirs + [root_dir]
+
+    @staticmethod
     def get_directories(user):
         #path = text.replace('saver save', '').lstrip().replace(' ', os.sep)
         path = config.DIR_TO_SAVE + os.sep + str(user.get_user_id())
         if not os.path.isdir(path):
             os.makedirs(path, 0755)
 
+        exist_dirs = Storage.recursive_walk(path)
         response = ''
-        for root_dir, subdir_list, files_list in os.walk(path):
-            for sub_dir in subdir_list:
-                response += '<%s><br>' % sub_dir
+        for exist_dir in exist_dirs:
+            if exist_dir != path:
+                response += '"%s"<br>' % ' '.join(exist_dir.replace(path, '').split(os.sep)[1:])
 
         return response
 
